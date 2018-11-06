@@ -1,0 +1,9 @@
+{
+    "dependencies": {
+        "@types/express": "^4.16.0",
+        "express": "^4.16.4"
+    },
+    "scripts": {
+        "start": "node build/index.js"
+    }
+}
