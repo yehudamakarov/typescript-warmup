@@ -1,0 +1,3 @@
+const mongoDbConnectionStringProduction = "";
+
+export { mongoDbConnectionStringProduction };
