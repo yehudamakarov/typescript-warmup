@@ -13,5 +13,6 @@ const momentDate = moment().format("MM/DD/YYYY");
 const url = `https://www.chabad.org/dailystudy/${subjectsToUrlPortionMap.chumash}.asp?tdate=${momentDate}`;
 
 rp(url).then((html) => {
+    // tslint:disable-next-line:no-debugger
     debugger;
 });
