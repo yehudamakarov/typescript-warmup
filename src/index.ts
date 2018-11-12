@@ -1,9 +1,12 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import mongoDbConfigFunction from "./config/mongoDbConfigFunction";
-import expressApp from "./expressApp";
+import ExpressApp from "./ExpressApp";
 
 mongoDbConfigFunction();
 
-expressApp.listen(3000, () => {
+ExpressApp.listen(3000, () => {
     // tslint:disable-next-line
     console.log(`Listening at port 3000...`);
 });

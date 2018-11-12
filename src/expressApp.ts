@@ -1,9 +1,6 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 import express, { Router } from "express";
 
-class App {
+class ExpressApp {
     public expressApp: express.Application;
 
     constructor() {
@@ -24,4 +21,4 @@ class App {
     }
 }
 
-export default new App().expressApp;
+export default new ExpressApp().expressApp;
