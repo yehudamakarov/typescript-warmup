@@ -26,9 +26,11 @@ class App extends React.Component<{}, State> {
             </div>
         );
     }
-    private updateCounter = (prevState: State) => ({ counter: prevState.counter })
+    private updateCounter = (prevState: State) => ({ counter: 5 })
     private testFetch() {
-        fetch("/api").then(resp => resp.body).then(body => {
+        fetch("/api").then(resp => resp.json()).then(body => {
+            // tslint:disable-next-line:no-console
+            console.log('body :', body);
             this.setState(this.updateCounter)
         })
     }
