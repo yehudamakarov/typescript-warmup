@@ -1,10 +1,10 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import mongoDbConfigFunction from "./config/mongoDbConfigFunction";
+import mongoDbConfig from "./config/mongoDbConfig";
 import ExpressApp from "./ExpressApp";
 
-mongoDbConfigFunction();
+mongoDbConfig();
 
 const PORT = process.env.PORT || 5000;
 

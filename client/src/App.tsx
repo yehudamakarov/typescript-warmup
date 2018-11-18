@@ -1,38 +1,26 @@
 import * as React from 'react';
-import './App.css';
 
-import logo from './logo.svg';
 
 const initialState = { counter: 0 }
 type State = Readonly<typeof initialState>
 
 class App extends React.Component<{}, State> {
     readonly state: State = initialState
-    componentDidMount() {
-        this.testFetch()
+
+    incrementCounter = () => {
+        this.setState(prevState => ({
+            counter: prevState.counter + 1,
+        }))
     }
+
     render() {
         const { counter } = this.state;
         return (
-            <div className="App">
-                <header className="App-header">
-                    <img src={logo} className="App-logo" alt="logo" />
-                    <h1 className="App-title">Welcome to React</h1>
-                </header>
-                <h1>{counter}</h1>
-                <p className="App-intro">
-                    To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
+            <div>
+                <h1>Counter: {counter}</h1>
+                <button onClick={this.incrementCounter}>Incrememnt</button>
             </div>
         );
-    }
-    private updateCounter = (prevState: State) => ({ counter: 5 })
-    private testFetch() {
-        fetch("/api").then(resp => resp.json()).then(body => {
-            // tslint:disable-next-line:no-console
-            console.log('body :', body);
-            this.setState(this.updateCounter)
-        })
     }
 }
 

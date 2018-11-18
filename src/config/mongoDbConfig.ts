@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { mongoDbConnectionStringDevelopment } from "./developmentKeys";
+import modelConnections from "./modelConnections";
 import { mongoDbConnectionStringProduction } from "./productionKeys";
 
 export default () => {
@@ -8,4 +9,5 @@ export default () => {
     } else {
         mongoose.connect(mongoDbConnectionStringDevelopment);
     }
+    modelConnections(mongoose);
 };

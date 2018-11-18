@@ -1,4 +1,6 @@
 import express, { Router } from "express";
+import chumashController from "./controllers/chumashController";
+import usersController from "./controllers/usersController";
 
 class ExpressApp {
     public expressApp: express.Application;
@@ -9,27 +11,8 @@ class ExpressApp {
     }
 
     private mountRoutes(): void {
-        const apiRouter = Router();
-        apiRouter.get("/", (req, res) => {
-            res.json({
-                message: "This is working",
-            });
-        });
-        apiRouter.get("/:number", (req, res) => {
-            res.json({
-                numberPassed: req.params.number,
-            });
-        });
-
-        const chumashRouter = Router();
-        chumashRouter.get("/:date", (req, res) => {
-            res.json({
-                message: req.params.date,
-            });
-        });
-
-        apiRouter.use("/chumash", chumashRouter);
-        this.expressApp.use("/api", apiRouter);
+        this.expressApp.use("/users", usersController);
+        this.expressApp.use("/chumash", chumashController);
     }
 }
 

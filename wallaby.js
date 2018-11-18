@@ -1,5 +1,5 @@
-module.exports = function (wallaby) {
-    return {
+export default (wallaby) =>
+    ({
         files: [
             'src/**/*.ts?(x)',
             'src/**/*.snap',
@@ -17,5 +17,4 @@ module.exports = function (wallaby) {
         testFramework: 'jest',
 
         debug: true
-    };
-};
+    });

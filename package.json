@@ -1,12 +1,14 @@
 {
     "dependencies": {
+        "@types/cheerio": "^0.22.9",
         "dotenv": "^6.1.0",
         "express": "^4.16.4",
         "mongoose": "^5.3.10",
         "typescript": "^3.1.6"
     },
     "scripts": {
-        "dev": "tsc && concurrently \"nodemon\" \"yarn client\"",
+        "dev": "nodemon",
+        "both": "tsc && concurrently \"nodemon\" \"yarn client\"",
         "client": "yarn --cwd client start",
         "start": "ts-node src/index.ts",
         "build": "tsc",
