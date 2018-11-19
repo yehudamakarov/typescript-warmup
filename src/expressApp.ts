@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import express from "express";
 import mongoDbConfig from "./config/mongoDbConfig";
 import chumashController from "./controllers/chumashController";
 import usersController from "./controllers/usersController";
@@ -9,16 +9,16 @@ class ExpressApp {
     constructor() {
         this.expressApp = express();
         this.MongoDbConfig();
-        this.mountRoutes();
+        this.mountControllers();
     }
 
     private MongoDbConfig() {
         mongoDbConfig();
     }
 
-    private mountRoutes(): void {
-        this.expressApp.use("/users", usersController);
-        this.expressApp.use("/chumash", chumashController);
+    private mountControllers(): void {
+        this.expressApp.use("/users", usersController());
+        this.expressApp.use("/chumash", chumashController());
     }
 }
 
