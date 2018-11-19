@@ -1,6 +1,5 @@
 {
     "dependencies": {
-        "@types/cheerio": "^0.22.9",
         "dotenv": "^6.1.0",
         "express": "^4.16.4",
         "mongoose": "^5.3.10",
@@ -15,10 +14,10 @@
         "test": "jest"
     },
     "devDependencies": {
+        "@types/cheerio": "^0.22.9",
         "@types/dotenv": "^6.1.0",
         "@types/express": "^4.16.0",
         "@types/jest": "^23.3.9",
-        "@types/moment": "^2.13.0",
         "@types/mongoose": "^5.3.1",
         "@types/node": "^10.12.3",
         "@types/request-promise": "^4.1.42",
