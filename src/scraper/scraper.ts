@@ -5,16 +5,30 @@ import rp from "request-promise";
 // export a function that takes args. Subjects and start/end date to fill up the
 // DB with.
 
-interface IHebrewContentItem {
-    [index: string]: string;
+interface IHebrewRashiObject {
+    diburHamaschil: string;
+    content: string;
 }
 
-interface IEnglishContentItem {
-    [index: string]: string;
+interface IEnglishRashiObject {
+    diburHamaschil: string;
+    content: string;
 }
 
-type HebrewContent = IHebrewContentItem[];
-type EnglishContent = IEnglishContentItem[];
+interface IHebrewPasukObject {
+    pasuk: string;
+    content: string;
+    // rashi: IHebrewRashiObject[];
+}
+
+interface IEnglishPasukObject {
+    pasuk: string;
+    content: string;
+    // rashi: IEnglishRashiObject[];
+}
+
+type HebrewContent = IHebrewPasukObject[];
+type EnglishContent = IEnglishPasukObject[];
 
 interface IChumashObject {
     learnOnDate: Date;
@@ -62,12 +76,12 @@ rp(url).then((html) => {
 
     for (let i = 0; i < amountOfPesukim; i++) {
         hebrewContent.push({
-            [hebrewTdNodes[i].childNodes[0].childNodes[0].nodeValue]:
-                hebrewTdNodes[i].childNodes[1].childNodes[0].nodeValue,
+            content: hebrewTdNodes[i].childNodes[1].childNodes[0].nodeValue,
+            pasuk: hebrewTdNodes[i].childNodes[0].childNodes[0].nodeValue,
         });
         englishContent.push({
-            [englishTdNodes[i].childNodes[1].childNodes[0].nodeValue]:
-                englishTdNodes[i].childNodes[2].childNodes[0].nodeValue,
+            content: englishTdNodes[i].childNodes[2].childNodes[0].nodeValue,
+            pasuk: englishTdNodes[i].childNodes[1].childNodes[0].nodeValue,
         });
 
     }
