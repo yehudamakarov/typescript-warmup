@@ -115,46 +115,34 @@ rp(url).then((html) => {
 
     const pesukimRows = doc(".Co_Verse");
     const amountOfPesukim = pesukimRows.length;
-    // const hebrewTdNodes = doc(".Co_Verse td:nth-child(3)");
-    // const englishTdNodes = doc(".Co_Verse td:nth-child(1)");
+    const hebrewTdNodes = doc(".Co_Verse td:nth-child(3)");
+    const englishTdNodes = doc(".Co_Verse td:nth-child(1)");
 
-    // const hebrewContent: HebrewPesukim = [];
-    // const englishContent: EnglishPesukim = [];
-
-    // for (let i = 0; i < amountOfPesukim; i++) {
-    //     hebrewContent.push({
-    //         pasukNumber: hebrewTdNodes[i].childNodes[0].childNodes[0].nodeValue,
-    //         pasukWords: hebrewTdNodes[i].childNodes[1].childNodes[0].nodeValue,
-    //     });
-    //     englishContent.push({
-    //         pasukNumber: englishTdNodes[i].childNodes[1].childNodes[0].nodeValue,
-    //         pasukWords: englishTdNodes[i].childNodes[2].childNodes[0].nodeValue,
-    //     });
-    // }
-    // iterate over. if current is pasuk => start a new object if it is a rashi
-    // => part of the same pasuk just passed until it is a pasuk again, and we
-    // should make a new pasuk
-
-    // **** // store rashi per pasuk as a new collection? for fancy pop up rashi views.
-
-    const allTrPasukAndRashi = doc("tr[class*='Co']");
     const hebrewPesukim: HebrewPesukim = [];
     const englishPesukim: EnglishPesukim = [];
 
-    const hebrewRashisOnPasuk: HebrewRashisOnPasuk = [];
-    const englishRashisOnPasuk: EnglishRashisOnPasuk = [];
-
-    for (let i = 0; i < allTrPasukAndRashi.length; i++) {
-        const eitherPasukOrRashi = allTrPasukAndRashi[i];
+    for (let i = 0; i < amountOfPesukim; i++) {
+        const eitherPasukOrRashi = pesukimRows[i];
         if (eitherPasukOrRashi.attribs.class.match(/Verse/)) {
-            // make a new IHebrewPasukObject
-            // make a new IEnglishPasukObject
+            hebrewPesukim.push({
+                pasukNumber: hebrewTdNodes[i].childNodes[0].childNodes[0].nodeValue,
+                pasukWords: hebrewTdNodes[i].childNodes[1].childNodes[0].nodeValue,
+            });
+            englishPesukim.push({
+                pasukNumber: englishTdNodes[i].childNodes[1].childNodes[0].nodeValue,
+                pasukWords: englishTdNodes[i].childNodes[2].childNodes[0].nodeValue,
+            });
         }
     }
 
-    for (let i = 0; i < allTrPasukAndRashi.length; i++) {
-        const eitherPasukOrRashi = allTrPasukAndRashi[i];
-        if (eitherPasukOrRashi.attribs.class.match(/Rashi/)) {
+    const allTrPasukAndRashi = doc("tr[class*='Co']");
+    const hebrewRashisOnPasuk: HebrewRashisOnPasuk = [];
+    const englishRashisOnPasuk: EnglishRashisOnPasuk = [];
+
+    for (let i = 1; i <= allTrPasukAndRashi.length; i++) {
+        const eitherPasukOrRashi = allTrPasukAndRashi[i - 1];
+        if (eitherPasukOrRashi.attribs.class.match(/Rashi/)
+            && !allTrPasukAndRashi[i - 1].attribs.class.match(/Verse/)) {
             // if this is rashi, and the previous element was a pasuk,
             // make a new array of rashis and add each one until another pasuk is reached.
         }
