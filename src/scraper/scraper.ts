@@ -71,6 +71,14 @@ rp(url).then((html) => {
     const hebrewTdNodes = doc(".Co_Verse td:nth-child(3)");
     const englishTdNodes = doc(".Co_Verse td:nth-child(1)");
 
+    // iterate over. if current is pasuk => start a new object if it is a rashi
+    // => part of the same pasuk just passed until it is a pasuk again, and we
+    // should make a new pasuk
+
+    // **** // store rashi per pasuk as a new collection? for fancy pop up rashi views.
+
+    const allTrPasukAndRashi = doc("tr[class*='Co']");
+
     const hebrewContent: HebrewContent = [];
     const englishContent: EnglishContent = [];
 
