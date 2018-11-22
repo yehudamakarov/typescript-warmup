@@ -11,16 +11,13 @@ import {
     TodaysRashiContent,
 } from "./scraperTypes";
 
-// =============================================================================
-// The Scraper
-// =============================================================================
 const subjectsForUrl = {
     chumash: "torahreading",
     tanya: "tanya",
     tehillim: "tehillim",
 };
 
-class ChumashScraper {
+export default class ChumashScraper {
     readonly url: string;
     readonly learnOnDate: Date;
     readonly dayOfTheWeek: string;
@@ -46,12 +43,11 @@ class ChumashScraper {
         return new Promise((resolve, reject) => {
             this.fetchContent().then((html) => {
                 const doc = $.load(html);
-                this.parseHtml(doc);
+                this.chumashDocument = this.parseHtml(doc);
                 if (this.chumashDocument === null) {
                     reject("There was a problem parsing this Html...");
                 } else {
                     resolve(this.chumashDocument);
-
                 }
             });
         });
@@ -124,7 +120,7 @@ class ChumashScraper {
 
     // }
 
-    private parseHtml(doc: CheerioStatic): void {
+    private parseHtml(doc: CheerioStatic): IChumashSection {
         const parshaNameEnglish = this.parseForParshaNameEnglish(doc);
         const hebrewPesukim: Pesukim = this.parseForHebrewPesukim(doc);
         const englishPesukim: Pesukim = this.parseForEnglishPesukim(doc);
@@ -224,5 +220,7 @@ class ChumashScraper {
             parshaNameEnglish,
             rashiDocument,
         };
+
+        return chumashDocument;
     }
 }

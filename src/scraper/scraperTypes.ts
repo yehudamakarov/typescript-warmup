@@ -9,7 +9,7 @@ export interface IChumashSection {
     dayOfTheWeek: string;
     hebrewPesukim: IPasukObject[];
     englishPesukim: IPasukObject[];
-    amountOfPesukim: number;
+    amountOfPesukim: number | null;
     rashiDocument: IRashiSection;
     aliyah: number;
     mmddyyyy: string;
