@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import ChumashSchema from "../models/Chumash";
+import { ChumashSchema } from "../models/Chumash";
 import RashiSchema from "../models/Rashi";
 
 export default () => {

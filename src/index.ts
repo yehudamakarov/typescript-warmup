@@ -1,6 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 import ExpressApp from "./ExpressApp";
 
 const PORT = process.env.PORT || 5000;

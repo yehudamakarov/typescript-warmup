@@ -22,7 +22,11 @@ class ChitasScraper {
     public processChumash() {
         this.chumashScraper.getContent().then((chumashContent) => {
             // TODO insert chumash content to DB
-            // this.chumashModel;
+            const aChumashDocument = new this.chumashModel(chumashContent);
+            aChumashDocument.save().then((success: any) => console.log(success));
         });
     }
 }
+
+const chitasScraper = new ChitasScraper();
+chitasScraper.processChumash();
