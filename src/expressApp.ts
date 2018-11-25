@@ -1,7 +1,6 @@
 import express from "express";
 import { mongoDbConfig } from "./config/mongoDbConfig";
 import chumashController from "./controllers/chumashController";
-import usersController from "./controllers/usersController";
 
 class ExpressApp {
     public expressApp: express.Application;
@@ -13,8 +12,7 @@ class ExpressApp {
     }
 
     private mountControllers(): void {
-        this.expressApp.use("/users", usersController());
-        this.expressApp.use("/chumash", chumashController());
+        this.expressApp.use("/chumash", chumashController);
     }
 }
 

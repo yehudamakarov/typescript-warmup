@@ -1,22 +1,15 @@
 import * as $ from "cheerio";
 import moment, { Moment } from "moment";
 import rp, { RequestPromise } from "request-promise";
-import {
-    IChumashSection,
-    IRashiObject,
-    IRashiSection,
-    IRashisOnAPasuk,
-    Pesukim,
-    RashiToAPasuk,
-    TodaysRashiContent,
-} from "./ChumashScraperTypes";
+import { IChumashObject, Pesukim } from "../models/Chumash";
+import { IRashiObject, IRashisOnAPasuk, ISingleRashi, RashiToAPasuk, TodaysRashiContent } from "../models/Rashi";
 const subjectsForUrl = {
     chumash: "torahreading",
     tanya: "tanya",
     tehillim: "tehillim",
 };
 export class ChumashScraper {
-    public chumashDocument: IChumashSection | null;
+    public chumashDocument: IChumashObject | null;
 
     private readonly urlToScrapeFrom: string;
     private readonly learnOnDate: Date;
@@ -36,7 +29,7 @@ export class ChumashScraper {
         this.chumashDocument = null;
         this.amountOfRashis = null;
     }
-    public getContent(): Promise<IChumashSection> {
+    public getContent(): Promise<IChumashObject> {
         const thisChumashScraper = this;
         return new Promise((resolve, reject) => {
             thisChumashScraper.fetchContent().then((html) => {
@@ -117,7 +110,7 @@ export class ChumashScraper {
                 let counter = 0;
                 do {
                     const currentHebrewRashi = allTrPasukAndRashi[i - 1 + counter].childNodes[5];
-                    const individualHebrewRashi: IRashiObject = {
+                    const individualHebrewRashi: ISingleRashi = {
                         belongsToPasuk: hebrewPasukNumber,
                         diburHamaschil: currentHebrewRashi.childNodes[0].childNodes[0].childNodes[0].nodeValue,
                         rashiWords: currentHebrewRashi.childNodes[0].childNodes[1].childNodes[0].nodeValue,
@@ -160,7 +153,7 @@ export class ChumashScraper {
                 let counter = 0;
                 do {
                     const currentEnglishRashi = allTrPasukAndRashi[i - 1 + counter].childNodes[1];
-                    const individualEnglishRashi: IRashiObject = {
+                    const individualEnglishRashi: ISingleRashi = {
                         belongsToPasuk: englishPasukNumber,
                         diburHamaschil: currentEnglishRashi.childNodes[0].childNodes[0].childNodes[0].nodeValue,
                         rashiWords: currentEnglishRashi.childNodes[0].childNodes[1].childNodes[0].nodeValue,
@@ -194,13 +187,13 @@ export class ChumashScraper {
         return todaysEnglishRashiContent;
     }
 
-    private parseHtml(doc: CheerioStatic): IChumashSection {
+    private parseHtml(doc: CheerioStatic): IChumashObject {
         const parshaNameEnglish = this.parseForParshaNameEnglish(doc);
         const hebrewPesukim: Pesukim = this.parseForHebrewPesukim(doc);
         const englishPesukim: Pesukim = this.parseForEnglishPesukim(doc);
         const todaysHebrewRashiContent: TodaysRashiContent = this.parseForHebrewRaahis(doc);
         const todaysEnglishRashiContent: TodaysRashiContent = this.parseForEnglishRashis(doc);
-        const rashiDocument: IRashiSection = {
+        const rashiDocument: IRashiObject = {
             aliyah: this.aliyah,
             amountOfRashis: this.amountOfRashis,
             learnOnDate: this.learnOnDate,
@@ -208,7 +201,7 @@ export class ChumashScraper {
             todaysEnglishRashiContent,
             todaysHebrewRashiContent,
         };
-        const chumashDocument: IChumashSection = {
+        const chumashDocument: IChumashObject = {
             aliyah: this.aliyah,
             amountOfPesukim: this.amountOfPesukim,
             dayOfTheWeek: this.dayOfTheWeek,

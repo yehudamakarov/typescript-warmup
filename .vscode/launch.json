@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Launch Scraper",
             "args": [
-                "${workspaceRoot}/src/scraper/ChitasScraper.ts"
+                "${workspaceRoot}/src/scraper/scraper.ts"
             ],
             "sourceMaps": true,
             "protocol": "inspector",

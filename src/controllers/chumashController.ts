@@ -1,20 +1,15 @@
 import { Router } from "express";
 import moment from "moment";
-import mongoose from "mongoose";
+import { ChumashModel, IChumashDocument } from "../models/Chumash";
 
-export default () => {
-    const chumashController = Router();
-    const chumashModel = mongoose.model("Chumash");
+const chumashController = Router();
 
-    chumashController.get("/", (req, res) => {
-        // const date = moment().subtract(1, "days");
-        const date = moment().subtract(1, "days").startOf("day").toDate();
-        chumashModel.findOne({ learnOnDate: date }).then((chumashDocument) => {
-            res.json(chumashDocument);
-        }).catch((reason) => {
-            res.json(reason);
-        });
+chumashController.get("/", (req, res) => {
+    // const date = moment().subtract(1, "days");
+    const date = moment().startOf("day").toDate();
+    ChumashModel.findOne({ learnOnDate: date }, (err, chumashDocument) => {
+        res.json(chumashDocument);
     });
+});
 
-    return chumashController;
-};
+export default chumashController;
