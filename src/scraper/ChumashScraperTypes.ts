@@ -7,8 +7,8 @@ export type Pesukim = IPasukObject[];
 export interface IChumashSection {
     learnOnDate: Date;
     dayOfTheWeek: string;
-    hebrewPesukim: IPasukObject[];
-    englishPesukim: IPasukObject[];
+    hebrewPesukim: Pesukim;
+    englishPesukim: Pesukim;
     amountOfPesukim: number | null;
     rashiDocument: IRashiSection;
     aliyah: number;
@@ -33,9 +33,7 @@ export interface IRashiSection {
     learnOnDate: Date;
     todaysHebrewRashiContent: TodaysRashiContent;
     todaysEnglishRashiContent: TodaysRashiContent;
-    amountOfRashis: number;
+    amountOfRashis: number | null;
     aliyah: number;
     mmddyyyy: string;
 }
-// =============================================================================
-// =============================================================================
