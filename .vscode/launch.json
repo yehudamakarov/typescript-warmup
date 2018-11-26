@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Launch Scraper",
             "args": [
-                "${workspaceRoot}/src/scraper/scraper.ts"
+                "${workspaceRoot}/src/scraperCli/index.ts"
             ],
             "sourceMaps": true,
             "protocol": "inspector",

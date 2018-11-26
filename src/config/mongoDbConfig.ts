@@ -7,8 +7,8 @@ import { mongoDbConnectionStringProduction } from "./productionKeys";
 
 export const mongoDbConfig = () => {
     if (process.env.NODE_ENV === "production") {
-        mongoose.connect(mongoDbConnectionStringProduction);
+        mongoose.connect(mongoDbConnectionStringProduction, { useNewUrlParser: true });
     } else {
-        mongoose.connect(mongoDbConnectionStringDevelopment);
+        mongoose.connect(mongoDbConnectionStringDevelopment, { useNewUrlParser: true });
     }
 };
