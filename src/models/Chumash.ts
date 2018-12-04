@@ -54,4 +54,4 @@ export const ChumashSchema = new mongoose.Schema({
     rashiDocument: RashiSchema,
 });
 
-export const ChumashModel: Model<IChumashDocument> = mongoose.model<IChumashDocument>("Chumash", ChumashSchema);
+export const ChumashMongooseModel: Model<IChumashDocument> = mongoose.model<IChumashDocument>("Chumash", ChumashSchema);
