@@ -21,19 +21,25 @@ commandLineApplication.command(
     })
     .action((args) => {
         return new Promise((resolve, reject) => {
+            commandLineApplication.log("Making Scraper...");
             const scraper = new ChitasScraper(args.amount, ChumashMongooseModel, RashiModel);
             scraper.on("succeededScraping", (learnOnDate: Date) => {
                 spinner.text =
                     `Successfully scraped content... **  ${learnOnDate} **`.padEnd(83, "--") +
                     `Finished chumashScraper.getContent() with a chumashDocument.`.padEnd(83, "--");
                 spinner.color = "yellow";
+                commandLineApplication.log(`Scraped ${learnOnDate}...`);
             });
             scraper.on("succeededSaving", (learnOnDate: Date) => {
                 spinner.text = "Saved!".padEnd(83, "#=#");
                 spinner.color = "green";
+                commandLineApplication.log(`Saved ${learnOnDate}`);
             });
             // the below method will emit the events defined above.
-            scraper.processChumash();
+            scraper.processChumash().then(() => {
+                commandLineApplication.log(`Have to scrape ${scraper.amountOfDaysToScrape} more days...`);
+                resolve();
+            });
         });
     });
 

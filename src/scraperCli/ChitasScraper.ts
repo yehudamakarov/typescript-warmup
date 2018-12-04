@@ -11,7 +11,7 @@ import { ChumashScraper } from "./ChumashScraper";
 
 export class ChitasScraper extends EventEmitter {
 
-    private amountOfDaysToScrape: number;
+    public amountOfDaysToScrape: number;
     private chumashScraper: ChumashScraper;
     private chumashModel: Model<IChumashDocument>;
     private RashiModel: Model<IRashiDocument>;
@@ -28,12 +28,10 @@ export class ChitasScraper extends EventEmitter {
         this.RashiModel = RashiModel;
     }
 
-    public processChumash() {
-        do {
-            this.chumashScraper.getContent()
-                .then(this.saveContent)
-                .then(this.goToNextDay);
-        } while (this.amountOfDaysToScrape > 0);
+    public processChumash(): Promise<void> {
+        return this.chumashScraper.getContent()
+            .then(this.saveContent)
+            .then(this.goToNextDay);
     }
 
     private goToNextDay(theDateJustScraped: Date) {
