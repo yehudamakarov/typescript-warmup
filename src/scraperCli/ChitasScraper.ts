@@ -1,6 +1,4 @@
-// TODO Event emitter responsible for looping through a given amount of time
-// todo Event emitter should implement spinner - spinner needs to know about which iteration of loop
-// TODO Event emitter needs to do some checks before inserting to the db
+// TODO needs to do some checks before inserting to the db
 import { EventEmitter } from "events";
 import moment = require("moment");
 import { Model } from "mongoose";
@@ -27,7 +25,7 @@ export class ChitasScraper extends EventEmitter {
         this.chumashModel = ChumashModel;
         this.RashiModel = RashiModel;
     }
-
+    // todo how to put this on a loop?
     public processChumash(): Promise<void> {
         return this.chumashScraper.getContent()
             .then(this.saveContent)
