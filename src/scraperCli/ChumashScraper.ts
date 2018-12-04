@@ -10,9 +10,9 @@ const subjectsForUrl = {
 };
 export class ChumashScraper {
     public chumashDocument: IChumashObject | null;
+    public readonly learnOnDate: Date;
 
     private readonly urlToScrapeFrom: string;
-    private readonly learnOnDate: Date;
     private readonly dayOfTheWeek: string;
     private readonly aliyah: number;
     private readonly mmddyyyy: string;
