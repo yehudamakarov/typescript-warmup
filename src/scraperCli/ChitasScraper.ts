@@ -30,12 +30,19 @@ export class ChitasScraper extends EventEmitter {
     }
 
     // only resolves when all days are scraped
+    // TODO continue the below pattern and try to push all logic to events as much as possible.
     public processChumash(): Promise<void> {
         const thisChitasScraper = this;
         return new Promise((resolve, reject) => {
             thisChitasScraper.getChumashUntilDone();
             thisChitasScraper.on("doneScrapingEverything", () => {
                 resolve();
+            });
+            thisChitasScraper.on("scrapeError", () => {
+                reject("Check where a scrapeError was emitted to fix this issue.");
+            });
+            thisChitasScraper.on("saveError", () => {
+                reject("Check where a saveError was emitted to fix this issue.");
             });
         });
     }
