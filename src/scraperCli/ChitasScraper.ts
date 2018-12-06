@@ -1,4 +1,7 @@
-// TODO needs to do some checks before inserting to the db
+// TODO needs to do some checks before inserting to the db / reflect
+// TODO confirmations and errors of checks in CLI
+// TODO must handle all rejected promises errors
+
 import { EventEmitter } from "events";
 import moment = require("moment");
 import { Model } from "mongoose";
@@ -42,16 +45,16 @@ export class ChitasScraper extends EventEmitter {
             this.emit("doneScrapingEverything");
             return;
         }
+        this.emit("startedScraping");
         this.chumashScraper.getContent()
-            .then(this.saveContent)
-            .then(this.wait5AndStartNextCall);
+            .then(this.saveContent.bind(this))
+            .then(this.wait5AndStartNextCall.bind(this));
     }
 
-    private wait5AndStartNextCall(theDateJustScraped: Date) {
-        const thisChitasScraper = this;
-        thisChitasScraper.goToNextDay(theDateJustScraped);
+    private wait5AndStartNextCall(theDateJustScraped: Date): void {
+        this.goToNextDay(theDateJustScraped);
         setTimeout(() => {
-            thisChitasScraper.getChumashUntilDone();
+            this.getChumashUntilDone();
         }, 5000);
     }
 
@@ -69,7 +72,7 @@ export class ChitasScraper extends EventEmitter {
         return aChumashDocument.save()
             .then((chumashDocument: IChumashDocument) => {
                 // tslint:disable-next-line:no-console
-                console.log(chumashDocument);
+                // console.log(chumashDocument);
                 this.emit("succeededSaving", chumashDocument.learnOnDate);
                 return chumashDocument.learnOnDate;
             });

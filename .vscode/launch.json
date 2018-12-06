@@ -18,6 +18,7 @@
                 "-r",
                 "ts-node/register"
             ],
+            "console": "externalTerminal"
         },
         {
             "name": "Launch",

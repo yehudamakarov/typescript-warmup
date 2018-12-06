@@ -34,7 +34,13 @@ export class ChumashScraper {
         return new Promise((resolve, reject) => {
             thisChumashScraper.fetchContent().then((html) => {
                 const doc = $.load(html);
-                thisChumashScraper.chumashDocument = thisChumashScraper.parseHtml(doc);
+                try {
+                    thisChumashScraper.chumashDocument = thisChumashScraper.parseHtml(doc);
+                } catch (error) {
+                    // tslint:disable-next-line:no-console
+                    console.log(error);
+                    reject(error);
+                }
                 if (thisChumashScraper.chumashDocument === null) {
                     reject("There was a problem parsing this Html...");
                 } else {
@@ -96,11 +102,13 @@ export class ChumashScraper {
         const englishPesukim = this.parseForPesukimUtility("english", doc);
         return englishPesukim;
     }
-    private parseForHebrewRaahis(doc: CheerioStatic): TodaysRashiContent {
+    private parseForHebrewRashis(doc: CheerioStatic): TodaysRashiContent {
         const todaysHebrewRashiContent: TodaysRashiContent = [];
         const allTrPasukAndRashi = doc("tr[class*='Co']");
         let howManyRashisCounter = 0;
         for (let i = 1; i <= allTrPasukAndRashi.length; i++) {
+            // tslint:disable-next-line:no-console
+            // console.log(i);
             const eitherPasukOrRashi = allTrPasukAndRashi[i - 1];
             if (eitherPasukOrRashi.attribs.class.match(/Rashi/)
                 && allTrPasukAndRashi[i - 2].attribs.class.match(/Verse/)) {
@@ -127,6 +135,7 @@ export class ChumashScraper {
                 todaysHebrewRashiContent.push(hebrewRashisOnThisPasuk);
             } else {
                 if (eitherPasukOrRashi.attribs.class.match(/Verse/)
+                    && allTrPasukAndRashi[i]
                     && !allTrPasukAndRashi[i].attribs.class.match(/Rashi/)) {
                     const hebrewPasukNumber = eitherPasukOrRashi.childNodes[5].childNodes[0].childNodes[0].nodeValue;
                     const hebrewRashisOnThisPasuk: IRashisOnAPasuk = {
@@ -169,6 +178,7 @@ export class ChumashScraper {
                 todaysEnglishRashiContent.push(englishRashisOnThisPasuk);
             } else {
                 if (eitherPasukOrRashi.attribs.class.match(/Verse/)
+                    && allTrPasukAndRashi[i]
                     && !allTrPasukAndRashi[i].attribs.class.match(/Rashi/)) {
                     const hebrewPasukNumber = eitherPasukOrRashi.childNodes[5].childNodes[0].childNodes[0].nodeValue;
                     const englishPasukNumber = eitherPasukOrRashi.childNodes[1].childNodes[1].childNodes[0].nodeValue;
@@ -191,7 +201,7 @@ export class ChumashScraper {
         const parshaNameEnglish = this.parseForParshaNameEnglish(doc);
         const hebrewPesukim: Pesukim = this.parseForHebrewPesukim(doc);
         const englishPesukim: Pesukim = this.parseForEnglishPesukim(doc);
-        const todaysHebrewRashiContent: TodaysRashiContent = this.parseForHebrewRaahis(doc);
+        const todaysHebrewRashiContent: TodaysRashiContent = this.parseForHebrewRashis(doc);
         const todaysEnglishRashiContent: TodaysRashiContent = this.parseForEnglishRashis(doc);
         const rashiDocument: IRashiObject = {
             aliyah: this.aliyah,
