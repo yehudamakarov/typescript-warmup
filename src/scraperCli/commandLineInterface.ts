@@ -37,7 +37,6 @@ commandLineApplication.command(
             });
             // the below method will emit the events defined above.
             scraper.processChumash().then(() => {
-                commandLineApplication.log(`Have to scrape ${scraper.amountOfDaysToScrape} more days...`);
                 resolve();
             });
         });

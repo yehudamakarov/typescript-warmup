@@ -25,11 +25,34 @@ export class ChitasScraper extends EventEmitter {
         this.chumashModel = ChumashModel;
         this.RashiModel = RashiModel;
     }
-    // todo how to put this on a loop?
+
+    // only resolves when all days are scraped
     public processChumash(): Promise<void> {
-        return this.chumashScraper.getContent()
+        const thisChitasScraper = this;
+        return new Promise((resolve, reject) => {
+            thisChitasScraper.getChumashUntilDone();
+            thisChitasScraper.on("doneScrapingEverything", () => {
+                resolve();
+            });
+        });
+    }
+
+    private getChumashUntilDone() {
+        if (this.amountOfDaysToScrape === 0) {
+            this.emit("doneScrapingEverything");
+            return;
+        }
+        this.chumashScraper.getContent()
             .then(this.saveContent)
-            .then(this.goToNextDay);
+            .then(this.wait5AndStartNextCall);
+    }
+
+    private wait5AndStartNextCall(theDateJustScraped: Date) {
+        const thisChitasScraper = this;
+        thisChitasScraper.goToNextDay(theDateJustScraped);
+        setTimeout(() => {
+            thisChitasScraper.getChumashUntilDone();
+        }, 5000);
     }
 
     private goToNextDay(theDateJustScraped: Date) {
@@ -38,7 +61,7 @@ export class ChitasScraper extends EventEmitter {
         this.amountOfDaysToScrape -= 1;
     }
 
-    private saveContent(chumashContent: IChumashObject) {
+    private saveContent(chumashContent: IChumashObject): Promise<Date> {
         const dateOfScrapedContent = chumashContent.learnOnDate;
         this.emit("succeededScraping", dateOfScrapedContent);
 
