@@ -16,8 +16,13 @@ commandLineApplication.command(
     "scrape chumash <amount>",
     "grab a specified amount of days and store them in the mongoDb instance.",
 )
-    .help((args) => {
-        spinner.text = "Provide a number of days to scrape and populate in the DB.";
+    .validate((args) => {
+        if (typeof args.amount !== "number") {
+            commandLineApplication.log("Please specify a number.");
+            return "Type 'help' for help.";
+        } else {
+            return true;
+        }
     })
     .action((args) => {
         return new Promise((resolve, reject) => {
