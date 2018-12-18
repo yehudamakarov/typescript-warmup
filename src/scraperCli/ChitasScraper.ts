@@ -38,12 +38,12 @@ export class ChitasScraper extends EventEmitter {
             thisChitasScraper.on("doneScrapingEverything", () => {
                 resolve();
             });
-            thisChitasScraper.on("scrapeError", () => {
-                reject("Check where a scrapeError was emitted to fix this issue.");
-            });
-            thisChitasScraper.on("saveError", () => {
-                reject("Check where a saveError was emitted to fix this issue.");
-            });
+            // thisChitasScraper.on("scrapeError", (reason) => {
+            //     reject(`Check where a scrapeError was emitted to fix this issue. Here: ${reason}`);
+            // });
+            // thisChitasScraper.on("saveError", () => {
+            //     reject("Check where a saveError was emitted to fix this issue.");
+            // });
         });
     }
 
@@ -55,7 +55,13 @@ export class ChitasScraper extends EventEmitter {
         this.emit("startedScraping");
         this.chumashScraper.getContent()
             .then(this.saveContent.bind(this))
-            .then(this.wait5AndStartNextCall.bind(this));
+            .then(this.wait5AndStartNextCall.bind(this))
+            .catch(this.emitScrapeErrorAndStartAnotherCall.bind(this));
+    }
+
+    private emitScrapeErrorAndStartAnotherCall(errorReason: string): void {
+        this.emit("scrapeError", errorReason, this.chumashScraper.learnOnDate);
+        this.wait5AndStartNextCall(this.chumashScraper.learnOnDate);
     }
 
     private wait5AndStartNextCall(theDateJustScraped: Date): void {

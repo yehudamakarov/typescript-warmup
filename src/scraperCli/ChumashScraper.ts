@@ -37,9 +37,8 @@ export class ChumashScraper {
                 try {
                     thisChumashScraper.chumashDocument = thisChumashScraper.parseHtml(doc);
                 } catch (error) {
-                    // tslint:disable-next-line:no-console
-                    console.log(error);
-                    reject(error);
+                    reject(error.stack);
+                    return;
                 }
                 if (thisChumashScraper.chumashDocument === null) {
                     reject("There was a problem parsing this Html...");
@@ -117,13 +116,25 @@ export class ChumashScraper {
                 const hebrewPasukNumber = pasukElement.childNodes[5].childNodes[0].childNodes[0].nodeValue;
                 let counter = 0;
                 do {
-                    const currentHebrewRashi = allTrPasukAndRashi[i - 1 + counter].childNodes[5];
-                    const individualHebrewRashi: ISingleRashi = {
-                        belongsToPasuk: hebrewPasukNumber,
-                        diburHamaschil: currentHebrewRashi.childNodes[0].childNodes[0].childNodes[0].nodeValue,
-                        rashiWords: currentHebrewRashi.childNodes[0].childNodes[1].childNodes[0].nodeValue,
-                    };
-                    hebrewRashisOnPasuk.push(individualHebrewRashi);
+                    try {
+                        const currentHebrewRashi = allTrPasukAndRashi[i - 1 + counter].childNodes[5];
+                        const individualHebrewRashi: ISingleRashi = {
+                            belongsToPasuk: hebrewPasukNumber,
+                            diburHamaschil: currentHebrewRashi.childNodes[0].childNodes[0].childNodes[0].nodeValue,
+                            rashiWords: currentHebrewRashi.childNodes[0].childNodes[1].childNodes[0].nodeValue,
+                        };
+                        hebrewRashisOnPasuk.push(individualHebrewRashi);
+                    } catch (error) {
+                        throw new Error(
+                            error +
+                            " --- More info at: " +
+                            "howManyRashisCounter : " + howManyRashisCounter +
+                            " / " +
+                            "counter : " + counter +
+                            " / " +
+                            "i : " + i,
+                        );
+                    }
                     howManyRashisCounter++;
                     counter++;
                 } while (allTrPasukAndRashi[i - 1 + counter]

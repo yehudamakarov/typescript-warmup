@@ -51,8 +51,27 @@ commandLineApplication.command(
                 spinner.text = "Succeeded with scrape...";
                 spinner.succeed();
             });
+            scraper.on("scrapeError", (reason, failedDate) => {
+                spinner.stopAndPersist({
+                    symbol: `FAILED - ${moment(failedDate).format("ll")} due to:`,
+                    text: reason,
+                });
+                commandLineApplication.log("");
+                spinner.stopAndPersist({
+                    symbol: "🔍",
+                    text: `Now trying - ${moment(failedDate).add(1, "days").format("ll")}`,
+                });
+                commandLineApplication.log("");
+                spinner.start("Trying the next date")
+                    .color = "green";
+            });
             // the below method will emit the events being listened for above.
             scraper.processChumash().then(() => {
+                resolve();
+            }).catch((reason) => {
+                spinner.fail(
+                    `Oh no! --- ${reason}`,
+                );
                 resolve();
             });
         });
