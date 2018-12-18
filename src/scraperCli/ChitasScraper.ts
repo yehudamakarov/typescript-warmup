@@ -30,20 +30,13 @@ export class ChitasScraper extends EventEmitter {
     }
 
     // only resolves when all days are scraped
-    // TODO continue the below pattern and try to push all logic to events as much as possible.
     public processChumash(): Promise<void> {
         const thisChitasScraper = this;
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             thisChitasScraper.getChumashUntilDone();
             thisChitasScraper.on("doneScrapingEverything", () => {
                 resolve();
             });
-            // thisChitasScraper.on("scrapeError", (reason) => {
-            //     reject(`Check where a scrapeError was emitted to fix this issue. Here: ${reason}`);
-            // });
-            // thisChitasScraper.on("saveError", () => {
-            //     reject("Check where a saveError was emitted to fix this issue.");
-            // });
         });
     }
 
@@ -61,11 +54,11 @@ export class ChitasScraper extends EventEmitter {
 
     private emitScrapeErrorAndStartAnotherCall(errorReason: string): void {
         this.emit("scrapeError", errorReason, this.chumashScraper.learnOnDate);
-        this.wait5AndStartNextCall(this.chumashScraper.learnOnDate);
+        this.wait5AndStartNextCall();
     }
 
-    private wait5AndStartNextCall(theDateJustScraped: Date): void {
-        this.goToNextDay(theDateJustScraped);
+    private wait5AndStartNextCall(): void {
+        this.goToNextDay(this.chumashScraper.learnOnDate);
         setTimeout(() => {
             this.getChumashUntilDone();
         }, 5000);
@@ -77,7 +70,7 @@ export class ChitasScraper extends EventEmitter {
         this.amountOfDaysToScrape -= 1;
     }
 
-    private saveContent(chumashContent: IChumashObject): Promise<Date> {
+    private saveContent(chumashContent: IChumashObject): Promise<void> {
         const dateOfScrapedContent = chumashContent.learnOnDate;
         this.emit("succeededScraping", dateOfScrapedContent);
 
@@ -87,7 +80,6 @@ export class ChitasScraper extends EventEmitter {
                 // tslint:disable-next-line:no-console
                 // console.log(chumashDocument);
                 this.emit("succeededSaving", chumashDocument.learnOnDate);
-                return chumashDocument.learnOnDate;
             });
 
     }
