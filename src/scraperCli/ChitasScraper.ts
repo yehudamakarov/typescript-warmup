@@ -1,6 +1,5 @@
 // TODO needs to do some checks before inserting to the db / reflect
-// TODO confirmations and errors of checks in CLI
-// TODO must handle all rejected promises errors
+// TODO confirmations and errors from checks in CLI
 
 import { EventEmitter } from "events";
 import moment = require("moment");
@@ -32,11 +31,15 @@ export class ChitasScraper extends EventEmitter {
     // only resolves when all days are scraped
     public processChumash(): Promise<void> {
         const thisChitasScraper = this;
-        return new Promise((resolve) => {
-            thisChitasScraper.getChumashUntilDone();
+        return new Promise((resolve, reject) => {
             thisChitasScraper.on("doneScrapingEverything", () => {
                 resolve();
             });
+            try {
+                thisChitasScraper.getChumashUntilDone();
+            } catch (error) {
+                reject(error.stack);
+            }
         });
     }
 
@@ -77,8 +80,6 @@ export class ChitasScraper extends EventEmitter {
         const aChumashDocument = new this.chumashModel(chumashContent);
         return aChumashDocument.save()
             .then((chumashDocument: IChumashDocument) => {
-                // tslint:disable-next-line:no-console
-                // console.log(chumashDocument);
                 this.emit("succeededSaving", chumashDocument.learnOnDate);
             });
 

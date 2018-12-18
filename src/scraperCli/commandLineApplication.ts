@@ -68,9 +68,13 @@ commandLineApplication.command(
             // the below method will emit the events being listened for above.
             scraper.processChumash().then(() => {
                 resolve();
-            }).catch((reason) => {
+            }).catch((errorStack) => {
+                spinner.stopAndPersist({
+                    symbol: "FAILED ALL: ",
+                    text: `${errorStack}`,
+                });
                 spinner.fail(
-                    `Oh no! --- ${reason}`,
+                    `Oh no!`,
                 );
                 resolve();
             });
