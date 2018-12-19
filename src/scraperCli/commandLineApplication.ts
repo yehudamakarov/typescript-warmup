@@ -3,10 +3,12 @@ import moment from "moment";
 import ora from "ora";
 import vorpalApp, { Args } from "vorpal";
 
+import { mongoDbConfig } from "../config/mongoDbConfig";
 import { ChumashMongooseModel } from "../models/Chumash";
 import { RashiModel } from "../models/Rashi";
 import { ChitasScraper } from "./ChitasScraper";
 
+mongoDbConfig();
 const commandLineApplication = new vorpalApp();
 
 const spinner = ora("Initializing Chitas Scraper...");
@@ -85,6 +87,24 @@ commandLineApplication.command(
             });
         });
     });
+
+commandLineApplication.command("delete chumash", "Delete all the Chumash records in the collection.").action((args) => {
+    return new Promise((resolve, reject) => {
+        spinner.start("Deleting all Chumash records...").color = "red";
+
+        ChumashMongooseModel.deleteMany({}, (err) => {
+            if (err) {
+                spinner.fail("There was a problem during deletion.");
+                commandLineApplication.log("");
+                resolve();
+            } else {
+                spinner.succeed("Done.");
+                commandLineApplication.log("");
+                resolve();
+            }
+        });
+    });
+});
 
 commandLineApplication.delimiter("Chitas Scraper $<<");
 

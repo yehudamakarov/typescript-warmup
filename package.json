@@ -15,7 +15,8 @@
         "dev": "nodemon",
         "both": "tsc && concurrently \"nodemon\" \"yarn client\"",
         "client": "yarn --cwd client start",
-        "start": "tsc && node build/scraperCli/index.js",
+        "start": "ts-node src/index.ts",
+        "scrape": "ts-node src/scraperCli/index.ts",
         "build": "tsc",
         "test": "jest"
     },

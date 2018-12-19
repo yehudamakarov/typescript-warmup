@@ -5,9 +5,13 @@ import { ChumashMongooseModel, IChumashDocument } from "../models/Chumash";
 const chumashController = Router();
 
 chumashController.get("/", (req, res) => {
-    // const date = moment().subtract(1, "days");
     const date = moment().startOf("day").toDate();
     ChumashMongooseModel.findOne({ learnOnDate: date }, (err, chumashDocument) => {
+        if (err) {
+            res.send(err);
+            return;
+        }
+
         res.json(chumashDocument);
     });
 });
