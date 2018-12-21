@@ -1,4 +1,4 @@
-// TODO needs to do some checks before inserting to the db / reflect
+// TODO Try/Catch every part of a scrape. save with error info instead
 // TODO confirmations and errors from checks in CLI
 
 import { EventEmitter } from "events";

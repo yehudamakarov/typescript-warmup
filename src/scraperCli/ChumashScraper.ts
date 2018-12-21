@@ -127,7 +127,7 @@ export class ChumashScraper {
                     } catch (error) {
                         throw new Error(
                             error +
-                            " --- More info at: " +
+                            " --- More info at parseForHebrewRashis(): " +
                             "howManyRashisCounter : " + howManyRashisCounter +
                             " / " +
                             "counter : " + counter +
@@ -172,13 +172,23 @@ export class ChumashScraper {
                 const englishPasukNumber = pasukElement.childNodes[1].childNodes[1].childNodes[0].nodeValue;
                 let counter = 0;
                 do {
-                    const currentEnglishRashi = allTrPasukAndRashi[i - 1 + counter].childNodes[1];
-                    const individualEnglishRashi: ISingleRashi = {
-                        belongsToPasuk: englishPasukNumber,
-                        diburHamaschil: currentEnglishRashi.childNodes[0].childNodes[0].childNodes[0].nodeValue,
-                        rashiWords: currentEnglishRashi.childNodes[0].childNodes[1].childNodes[0].nodeValue,
-                    };
-                    englishRashisOnPasuk.push(individualEnglishRashi);
+                    try {
+                        const currentEnglishRashi = allTrPasukAndRashi[i - 1 + counter].childNodes[1];
+                        const individualEnglishRashi: ISingleRashi = {
+                            belongsToPasuk: englishPasukNumber,
+                            diburHamaschil: currentEnglishRashi.childNodes[0].childNodes[0].childNodes[0].nodeValue,
+                            rashiWords: currentEnglishRashi.childNodes[0].childNodes[1].childNodes[0].nodeValue,
+                        };
+                        englishRashisOnPasuk.push(individualEnglishRashi);
+                    } catch (error) {
+                        throw new Error(
+                            error +
+                            " --- More info at parseForEnglishRashis(): " +
+                            "counter : " + counter +
+                            " / " +
+                            "i : " + i,
+                        );
+                    }
                     counter++;
                 } while (allTrPasukAndRashi[i - 1 + counter]
                     && !allTrPasukAndRashi[i - 1 + counter].attribs.class.match(/Verse/));
